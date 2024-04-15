@@ -1,48 +1,45 @@
 pipeline {
     agent any
     environment {
-        dockerImage = ''
-        registry = 'ashay1987/flight_price_predictor'
-        registryCredential = 'dockerhub'
+              APP_NAME = "flight"
     }
 
     stages {
-        stage('Checkout') {
+        stage("Cleanup Workspace") {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/gawaliashay/flight-price-predictor.git']])
+                cleanWs()
             }
         }
-        stage('Build Docker Image') {
+
+        stage("Checkout from SCM") {
+               steps {
+                   git branch: 'main', credentialsId: 'GitHub', url: 'https://github.com/Ashfaque-9x/gitops-register-app'
+               }
+        }
+
+        stage("Update the Deployment Tags") {
             steps {
-                script {
-                    dockerImage = docker.build registry
+                sh """
+                   cat deployment.yaml
+                   sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' deployment.yaml
+                   cat deployment.yaml
+                """
+            }
+        }
+
+        stage("Push the changed deployment file to Git") {
+            steps {
+                sh """
+                   git config --global user.name "Ashfaque-9x"
+                   git config --global user.email "ashfaque.s510@gmail.com"
+                   git add deployment.yaml
+                   git commit -m "Updated Deployment Manifest"
+                """
+                withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                  sh "git push https://github.com/Ashfaque-9x/gitops-register-app main"
                 }
             }
         }
-        stage('Upload Image To Dockerhub') {
-            steps {
-                script{
-                    docker.withRegistry('', registryCredential) {
-                    dockerImage.push()
-                    }
-                }
-            }
-        }
-        // Stopping Docker containers for cleaner Docker run
-        stage('stop previous container if any') {
-            steps {
-                sh 'docker ps -f name=flight_Container -q | xargs --no-run-if-empty docker container stop'
-                sh 'docker container ls -a -fname=flight_Container -q | xargs -r docker container rm'
-                }
-            }
-        // Running Docker container, make sure port 8096 is opened
-        stage('Run Docker Container') {
-            steps{
-                script{
-                    dockerImage.run("-p 3000:3000 --rm --name flight_Container")
-                }
-            }
-        }
-        
+      
     }
 }
