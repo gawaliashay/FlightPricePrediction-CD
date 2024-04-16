@@ -3,6 +3,7 @@ pipeline {
     environment {
                 APP_NAME = "flight"
                 RELEASE = "1.0.0"
+                IMAGE_TAG = 
     }
 
     stages {
@@ -22,7 +23,7 @@ pipeline {
             steps {
                 sh """
                    cat deployment.yaml
-                   sed -i 's/${RELEASE}.*/${IMAGE_TAG}/g' deployment.yaml
+                   sed -i "s/${RELEASE}.*/${IMAGE_TAG}/g" deployment.yaml
                    cat deployment.yaml
                 """
             }
