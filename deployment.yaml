@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flight:IMAGE_TAG
+  name: flight-deployment
   labels:
-    app.kubernetes.io/name: flight:IMAGE_TAG
+    app.kubernetes.io/name: flight
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: flight:IMAGE_TAG
+      app.kubernetes.io/name: flight
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: flight:IMAGE_TAG
+        app.kubernetes.io/name: flight
     spec:
       containers:
-      - name: flight:IMAGE_TAG
-        image: ashay1987/flight:IMAGE_TAG
+      - name: flight
+        image: ashay1987/flight:1.0.0
         ports:
         - containerPort: 3000
 
@@ -25,10 +25,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: flight:IMAGE_TAG
+  name: flight-service
 spec:
   selector:
-    app.kubernetes.io/name: flight:IMAGE_TAG
+    app.kubernetes.io/name: flight
   ports:
     - protocol: TCP
       port: 80
@@ -39,7 +39,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: flight:IMAGE_TAG
+  name: flight-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -51,6 +51,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: flight:IMAGE_TAG
+            name: flight-service
             port:
              number: 80
