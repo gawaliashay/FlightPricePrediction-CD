@@ -3,6 +3,7 @@ pipeline {
     environment {
                 APP_NAME = "flight"
                 RELEASE = "1.0.0"
+                IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
     }
 
     stages {
