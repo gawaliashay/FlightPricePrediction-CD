@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-              APP_NAME = "flight"
+                APP_NAME = "flight"
+                RELEASE = "1.0.0"
     }
 
     stages {
