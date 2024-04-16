@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flight
-        image: ashay1987/flight:-2
+        image: ashay1987/flight:1.0.0-2
         ports:
         - containerPort: 3000
 
