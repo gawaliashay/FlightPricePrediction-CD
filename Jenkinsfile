@@ -1,11 +1,7 @@
 pipeline {
     agent any
     environment {
-        APP_NAME = "flight"
-        RELEASE = "1.0.0"
-    }
-    parameters {
-        string(name: "IMAGE_TAG", defaultValue: "1.0.0-9", description: 'Specify the image tag')
+        APP_NAME = "flight-Pred"
     }
     stages {
         stage("Cleanup Workspace") {
@@ -25,7 +21,7 @@ pipeline {
                 script {
                     sh """
                        cat deployment.yaml
-                       sed -i 's/\"IMAGE_TAG\"/${params.IMAGE_TAG}/g' deployment.yaml
+                       sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' deployment.yaml
                        cat deployment.yaml
                     """
                 }
