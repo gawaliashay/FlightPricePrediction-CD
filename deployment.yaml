@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flight
-        image: ashay1987/flight-Pred:1.0.0-62
+        image: ashay1987/flight-Pred:IMAGE_TAG
         ports:
         - containerPort: 3000
 
