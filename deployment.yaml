@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flight
-        image: ashay1987/airline:${IMAGE_TAG}
+        image: ashay1987/airline:1.0.0-5
         ports:
         - containerPort: 3000
 
