@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        APP_NAME = "flight-Pred"
+        APP_NAME = "Airline"
     }
     stages {
         stage("Cleanup Workspace") {
